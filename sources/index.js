@@ -16,11 +16,10 @@ function findNode(node, tag, attrName, result) {
     }
 }
 function replaceTplData(node, data) {
-    if (node.nodeName == "#text") {
         const getDataKey = [];
         const pattern = /{{\s*([^{}^\s]*)\s*}}/g
         let match;
-
+        
         while ((match = pattern.exec(node.value)) !== null) {
             // 去掉空格
             const trimmedMatch = match[1]
@@ -29,9 +28,15 @@ function replaceTplData(node, data) {
         getDataKey.forEach(item => {
             let getDatakeyValue = data.match(new RegExp(`\"${item}\":[ ]{0,}\"([^\",]*)\"`, 'g'))[0] || ''
             let getDataValue = getDatakeyValue.replace(new RegExp(`\"${item}\":[ ]{0,}\"(.*)\"`), '$1')
-            node.value = node.value.replace(new RegExp(`{{${item}}}|{{ ${item} }}`, 'g'), getDataValue)
+            if (node.nodeName == "#text") {
+                node.value = node.value.replace(new RegExp(`{{${item}}}|{{ ${item} }}`, 'g'), getDataValue)
+            } else  {
+                node.attrs = node.attrs.map(cl => {
+                    cl.value = cl.value.replace(new RegExp(`{{${item}}}|{{ ${item} }}`, 'g'), getDataValue)
+                    return item
+                }) 
+            }
         })
-    }
     if (node.childNodes) {
         for (const childNode of node.childNodes) {
             replaceTplData(childNode, data);
