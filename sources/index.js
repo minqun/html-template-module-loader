@@ -16,27 +16,41 @@ function findNode(node, tag, attrName, result) {
     }
 }
 function replaceTplData(node, data) {
+    
         const getDataKey = [];
         const pattern = /{{\s*([^{}^\s]*)\s*}}/g
         let match;
-        
+        if (node.nodeName == "#text") {
         while ((match = pattern.exec(node.value)) !== null) {
             // 去掉空格
             const trimmedMatch = match[1]
             getDataKey.push(trimmedMatch);
         }
+        console.log(getDataKey, 'getDataKey')
         getDataKey.forEach(item => {
             let getDatakeyValue = data.match(new RegExp(`\"${item}\":[ ]{0,}\"([^\",]*)\"`, 'g'))[0] || ''
             let getDataValue = getDatakeyValue.replace(new RegExp(`\"${item}\":[ ]{0,}\"(.*)\"`), '$1')
             if (node.nodeName == "#text") {
                 node.value = node.value.replace(new RegExp(`{{${item}}}|{{ ${item} }}`, 'g'), getDataValue)
-            } else  {
-                node.attrs = node.attrs.map(cl => {
-                    cl.value = cl.value.replace(new RegExp(`{{${item}}}|{{ ${item} }}`, 'g'), getDataValue)
-                    return item
-                }) 
-            }
+            } 
         })
+    } else {
+        node.attrs && node.attrs.forEach(nodeAttr => {
+            const getDataKeyAt = []
+            while ((match = pattern.exec(nodeAttr.value)) !== null) {
+                // 去掉空格
+                const trimmedMatch = match[1]
+                getDataKeyAt.push(trimmedMatch);
+            }
+            getDataKeyAt.forEach(item => {
+                let getDatakeyValue = data.match(new RegExp(`\"${item}\":[ ]{0,}\"([^\",]*)\"`, 'g'))[0] || ''
+                let getDataValue = getDatakeyValue.replace(new RegExp(`\"${item}\":[ ]{0,}\"(.*)\"`), '$1')
+                nodeAttr.value = nodeAttr.value.replace(new RegExp(`{{${item}}}|{{ ${item} }}`, 'g'), getDataValue)
+            })
+        })
+        
+    }
+
     if (node.childNodes) {
         for (const childNode of node.childNodes) {
             replaceTplData(childNode, data);
