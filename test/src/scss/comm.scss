@@ -1,0 +1,23 @@
+@mixin boxMix {
+    margin: 0;
+    padding: 0;
+}
+$device: 768;
+$vh: 100vh; 
+$vw: 100vw; 
+@function fz($size, $unit) {
+    @return calc($size/$device) * $unit;
+}
+@mixin min($size: 750) {
+    @media screen and (min-width: $size) {
+        @content
+    }
+}
+
+$fontSize: fz(14, $vh);
+html, body {
+    @include boxMix;
+    font-size: $fontSize;
+  
+    font-family: Arial, sans-serif;
+}

@@ -1,0 +1,27 @@
+{
+    "name": "html-template-module-loader",
+    "version": "0.0.3",
+    "description": "template insert to html",
+    "main": "sources/index.js",
+    "files": [
+      "sources"
+    ],
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "engines": {
+      "node": ">= 10.13.0",
+      "webpack": " >=5.0.0"
+    },
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {},
+    "peerDependencies": {
+      "html-loader": "^4.2.0",
+      "parse5-utils": "^2.0.0"
+    },
+    "dependencies": {
+      "html-loader": "^4.2.0",
+      "parse5-utils": "^2.0.0"
+    }
+  }
