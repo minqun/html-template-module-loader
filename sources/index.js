@@ -28,7 +28,8 @@ function replaceTplData(node, data) {
         }
         console.log(getDataKey, 'getDataKey')
         getDataKey.forEach(item => {
-            let getDatakeyValue = data.match(new RegExp(`\"${item}\":[ ]{0,}\"([^\",]*)\"`, 'g'))[0] || ''
+            let keyValueStr = data.match(new RegExp(`\"${item}\":[ ]{0,}\"([^\",]*)\"`, 'g')) && data.match(new RegExp(`\"${item}\":[ ]{0,}\"([^\",]*)\"`, 'g'))[0]
+            let getDatakeyValue = keyValueStr || ''
             let getDataValue = getDatakeyValue.replace(new RegExp(`\"${item}\":[ ]{0,}\"(.*)\"`), '$1')
             if (node.nodeName == "#text") {
                 node.value = node.value.replace(new RegExp(`{{${item}}}|{{ ${item} }}`, 'g'), getDataValue)
@@ -43,9 +44,12 @@ function replaceTplData(node, data) {
                 getDataKeyAt.push(trimmedMatch);
             }
             getDataKeyAt.forEach(item => {
-                let getDatakeyValue = data.match(new RegExp(`\"${item}\":[ ]{0,}\"([^\",]*)\"`, 'g'))[0] || ''
+            let keyValueStr = data.match(new RegExp(`\"${item}\":[ ]{0,}\"([^\",]*)\"`, 'g')) && data.match(new RegExp(`\"${item}\":[ ]{0,}\"([^\",]*)\"`, 'g'))[0]
+
+                let getDatakeyValue =  keyValueStr || ''
                 let getDataValue = getDatakeyValue.replace(new RegExp(`\"${item}\":[ ]{0,}\"(.*)\"`), '$1')
                 nodeAttr.value = nodeAttr.value.replace(new RegExp(`{{${item}}}|{{ ${item} }}`, 'g'), getDataValue)
+                console.log( node.attrs, node, 'arrts-------')
             })
         })
         
