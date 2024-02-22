@@ -1,6 +1,6 @@
 {
     "name": "html-template-module-loader",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "description": "template insert to html",
     "main": "sources/index.js",
     "files": [

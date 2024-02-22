@@ -26,11 +26,11 @@ function replaceTplData(node, data) {
             const trimmedMatch = match[1]
             getDataKey.push(trimmedMatch);
         }
-        console.log(getDataKey, 'getDataKey')
         getDataKey.forEach(item => {
-            let keyValueStr = data.match(new RegExp(`\"${item}\":[ ]{0,}\"([^\",]*)\"`, 'g')) && data.match(new RegExp(`\"${item}\":[ ]{0,}\"([^\",]*)\"`, 'g'))[0]
+            let keyValueStr = data.match(new RegExp(`\"${item}\":[ ]{0,}\"([^\"]*)\"`, 'g')) && data.match(new RegExp(`\"${item}\":[ ]{0,}\"([^\"]*)\"`, 'g'))[0]
             let getDatakeyValue = keyValueStr || ''
-            let getDataValue = getDatakeyValue.replace(new RegExp(`\"${item}\":[ ]{0,}\"(.*)\"`), '$1')
+            let getDataValue = getDatakeyValue.replace(new RegExp(`\"${item}\":[ ]{0,}\"([^\"]*)\"`), '$1')
+            console.log('getDataValue:::', keyValueStr)
             if (node.nodeName == "#text") {
                 node.value = node.value.replace(new RegExp(`{{${item}}}|{{ ${item} }}`, 'g'), getDataValue)
             } 
@@ -44,12 +44,11 @@ function replaceTplData(node, data) {
                 getDataKeyAt.push(trimmedMatch);
             }
             getDataKeyAt.forEach(item => {
-            let keyValueStr = data.match(new RegExp(`\"${item}\":[ ]{0,}\"([^\",]*)\"`, 'g')) && data.match(new RegExp(`\"${item}\":[ ]{0,}\"([^\",]*)\"`, 'g'))[0]
+            let keyValueStr = data.match(new RegExp(`\"${item}\":[ ]{0,}\"([^\"]*)\"`, 'g')) && data.match(new RegExp(`\"${item}\":[ ]{0,}\"([^\"]*)\"`, 'g'))[0]
 
                 let getDatakeyValue =  keyValueStr || ''
-                let getDataValue = getDatakeyValue.replace(new RegExp(`\"${item}\":[ ]{0,}\"(.*)\"`), '$1')
+                let getDataValue = getDatakeyValue.replace(new RegExp(`\"${item}\":[ ]{0,}\"([^\"]*)\"`), '$1')
                 nodeAttr.value = nodeAttr.value.replace(new RegExp(`{{${item}}}|{{ ${item} }}`, 'g'), getDataValue)
-                console.log( node.attrs, node, 'arrts-------')
             })
         })
         
@@ -80,7 +79,6 @@ function insertFileNodeToTargetNode (node, insertFile, insertTag, insertAttr, _t
     replaceTplToHtml(insertNode, options.tag, options.attr, _this)
     findNode(insertNode, 'div', 'tpl', result)
     if (data) {
-        console.log(result, 'result', data)
         replaceTplData(insertNode,  data)
     }
    
